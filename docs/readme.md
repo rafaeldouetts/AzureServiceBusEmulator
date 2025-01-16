@@ -33,6 +33,8 @@ A arquitetura da aplicação é composta por diversas Azure Functions e serviço
 
 ## 2. Resiliência Durante Falhas Temporárias da Aplicação
 Caso a sua aplicação fique temporariamente fora do ar, as mensagens na fila não serão perdidas. Elas permanecerão na fila até que o sistema esteja disponível para processá-las, garantindo a continuidade dos processos e a integridade dos dados.
+
+
 ![Descrição do GIF](./SuaAplicacaoEstaFora.gif)
 
 ## 3. Retry (Tentativas de Reenvio Automáticas)
@@ -77,12 +79,13 @@ Cada uma dessas **Subscription** será consumida pelas respectivas funções de 
 - Crie uma chave API Ao configurar uma integração com sua conta Brevo, você pode precisar criar uma nova chave API:
 ![Descrição do GIF](./create_new_key.jpg)
 
+- Clique em Gerar.
+![alt text](image.png)
+
+- Clique em OK.
+![alt text](image-1.png)
+
 - As credenciais podem ser armazenadas em **Azure Key Vault** ou no **App Settings** da função para maior segurança.
-
-### Azure Functions
-
-1. Crie e configure as **Azure Functions** para escutar os tópicos corretos.
-2. Implemente as lógicas de processamento para enviar e-mails e mensagens de WhatsApp conforme os eventos recebidos.
 
 ### Dead Letter Queue
 
@@ -92,9 +95,9 @@ Cada uma dessas **Subscription** será consumida pelas respectivas funções de 
 ## Como Funciona o Fluxo
 
 1. O usuário faz uma solicitação de registro através do endpoint `RegisterFunction`.
-2. O comando é disparado e, ao ser processado, um evento é publicado no **Azure Service Bus**.
+2. O comando é disparado e, ao ser processado, um evento é publicado em um tópico do **Azure Service Bus**.
 3. O evento de cadastro de usuário é consumido por duas funções (para e-mail e WhatsApp) que enviam as respectivas mensagens.
-4. Se houver falha em qualquer parte do processo, as mensagens podem ser enviadas para a **Dead Letter Queue** e processadas pela função `DeadLetterProcessFunction`.
+4. Se houver falha em qualquer parte do processo, as mensagens são enviadas para a **Dead Letter Queue** e processadas pela função `DeadLetterProcessFunction`.
 
 ## Conclusão
 
