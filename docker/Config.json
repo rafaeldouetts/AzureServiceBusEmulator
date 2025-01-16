@@ -3,6 +3,15 @@
     "Namespaces": [
       {
         "Name": "sbemulatorns",
+        "Queues": [
+          {
+            "Name": "DeadLetterQueue",
+            "Properties": {
+              "MaxSizeInMegabytes": 1024,
+              "RequiresDuplicateDetection": false
+            }
+          }
+        ],
         "Topics": [
           {
             "Name": "client.created",
@@ -13,16 +22,28 @@
             },
             "Subscriptions": [
               {
-                "Name": "welcome.processing",
+                "Name": "welcome.whatsapp",
                 "Properties": {
-                  "DeadLetteringOnMessageExpiration": false,
+                  "DeadLetteringOnMessageExpiration": true,
                   "DefaultMessageTimeToLive": "PT1H",
                   "LockDuration": "PT1M",
-                  "MaxDeliveryCount": 10,
-                  "ForwardDeadLetteredMessagesTo": "",
-                  "ForwardTo": "",
+                  "MaxDeliveryCount": 2,
+                  "ForwardDeadLetteredMessagesTo": "DeadLetterQueue",
                   "RequiresSession": false
-                }
+                },
+                "Rules": []
+              },
+              {
+                "Name": "welcome.email",
+                "Properties": {
+                  "DeadLetteringOnMessageExpiration": true,
+                  "DefaultMessageTimeToLive": "PT1H",
+                  "LockDuration": "PT1M",
+                  "MaxDeliveryCount": 2,
+                  "ForwardDeadLetteredMessagesTo": "DeadLetterQueue",
+                  "RequiresSession": false
+                },
+                "Rules": []
               }
             ]
           }

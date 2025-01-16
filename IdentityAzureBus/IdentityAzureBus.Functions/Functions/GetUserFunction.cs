@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
-namespace IdentityAzureBus.Functions
+namespace IdentityAzureBus.Functions.Functions
 {
     public class GetUserFunction
     {
@@ -22,7 +22,7 @@ namespace IdentityAzureBus.Functions
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
-            string UserId= "";
+            string UserId = "";
 
             // Cria a consulta
             var query = new GetUserQuery(UserId);

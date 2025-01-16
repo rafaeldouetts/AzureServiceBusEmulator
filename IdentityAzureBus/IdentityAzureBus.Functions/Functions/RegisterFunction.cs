@@ -7,7 +7,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-namespace IdentityAzureBus
+namespace IdentityAzureBus.Functions.Functions
 {
     public class RegisterFunction
     {

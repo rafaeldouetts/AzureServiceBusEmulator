@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IdentityAzureBus.Common;
+﻿using IdentityAzureBus.Common;
 using IdentityAzureBus.Events;
 using MediatR;
 
@@ -27,7 +22,7 @@ namespace IdentityAzureBus.Commands
             };
             
             // Criação do evento
-            var userCreatedEvent = new UserCreatedEvent(request.Name, request.Email);
+            var userCreatedEvent = new UserCreatedEvent(request.Name, request.Email, request.Telefone);
 
             // Disparar o evento através do MediatR
             await _mediator.Publish(userCreatedEvent, cancellationToken);

@@ -6,11 +6,13 @@ namespace IdentityAzureBus.Events
     {
         public string Username { get; }
         public string Email { get; }
+        public string Telefone { get; set; }
 
-        public UserCreatedEvent(string username, string email)
+        public UserCreatedEvent(string username, string email, string telefone)
         {
             Username = username;
             Email = email;
+            Telefone = telefone;
         }
 
     }

@@ -8,6 +8,9 @@ using IdentityAzureBus.Commands;
 using Microsoft.Extensions.Options;
 using static IdentityAzureBus.Queries.QueryHandler;
 using IdentityAzureBus.Events;
+using IdentityAzureBus.Domain.Interfaces;
+using IdentityAzureBus.Application;
+using MongoDB.Driver;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
@@ -32,5 +35,16 @@ builder.Services.AddMediatR(options =>
     options.RegisterServicesFromAssembly(typeof(GetUserQueryHandler).Assembly);
     options.RegisterServicesFromAssembly(typeof(UserCreatedEventHandler).Assembly);
 });
+
+builder.Services.AddTransient<IWhatsappService, WhatsAppService>();
+builder.Services.AddTransient<IEmailService, EmailService>();
+builder.Services.AddTransient<IMongoDBService, MongoDBService>();
+
+builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
+{
+    var connectionString = Environment.GetEnvironmentVariable("MongoDBConnectionString");
+    return new MongoClient(connectionString);
+});
+
 
 builder.Build().Run();

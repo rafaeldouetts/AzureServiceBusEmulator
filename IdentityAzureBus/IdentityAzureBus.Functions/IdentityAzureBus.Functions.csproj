@@ -25,7 +25,9 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IdentityAzureBus.Application\IdentityAzureBus.Application.csproj" />
     <ProjectReference Include="..\IdentityAzureBus.Commands\IdentityAzureBus.Commands.csproj" />
+    <ProjectReference Include="..\IdentityAzureBus.Domain\IdentityAzureBus.Domain.csproj" />
     <ProjectReference Include="..\IdentityAzureBus.Events\IdentityAzureBus.Events.csproj" />
     <ProjectReference Include="..\IdentityAzureBus.Queries\IdentityAzureBus.Queries.csproj" />
   </ItemGroup>

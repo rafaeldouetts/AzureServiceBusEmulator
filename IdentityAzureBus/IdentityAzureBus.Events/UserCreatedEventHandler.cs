@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Azure.Messaging.ServiceBus;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -21,9 +23,10 @@ namespace IdentityAzureBus.Events
         {
             // Aqui você pode reagir ao evento, por exemplo, enviar um e-mail ou logar informações.
             _logger.LogInformation($"User Created: Username = {notification.Username}, Email = {notification.Email}");
-
-            // Caso queira realizar alguma lógica assíncrona (ex: enviar e-mail)
-            // await SomeAsyncService.SendEmailAsync(notification.Email);
+            
+            var client = new ServiceBusClient("Endpoint=sb://localhost:5672;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=SAS_KEY_VALUE;UseDevelopmentEmulator=true;");
+            var sender = client.CreateSender("client.created");
+            await sender.SendMessageAsync(new ServiceBusMessage(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(notification))));
 
             await Task.CompletedTask;
         }

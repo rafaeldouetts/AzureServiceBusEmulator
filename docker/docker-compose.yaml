@@ -1,37 +1,72 @@
-version: '3.8'
-
 services:
   emulator:
     container_name: "servicebus-emulator"
     image: mcr.microsoft.com/azure-messaging/servicebus-emulator:latest
     volumes:
-      - emulatordata:/config.json
+      - ./Config.json:/ServiceBus_Emulator/ConfigFiles/Config.json
     ports:
       - "5672:5672"
     environment:
-      SQL_SERVER: sqledge
+      SQL_SERVER: database
       MSSQL_SA_PASSWORD: "P@55w0rd"
       ACCEPT_EULA:  "Y"
     depends_on:
-      - sqledge
+      - database
     networks:
       sb-emulator:
         aliases:
           - "sb-emulator"
 
-  sqledge:
-    container_name: "sqledge"
-    image: "mcr.microsoft.com/azure-sql-edge:latest"
+  database:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: database
+    ports:
+      - "1433:1433"
+    volumes:
+    - dbdata:/var/opt/mssql
     environment:
-      ACCEPT_EULA: "Y"
+      MSSQL_TCP_PORT: 1433
       MSSQL_SA_PASSWORD: "P@55w0rd"
+      ACCEPT_EULA: "Y"
     networks:
-      sb-emulator:
-        aliases:
-          - "sqledge"
+      - sb-emulator
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"  # Expõe a porta do MongoDB
+    volumes:
+      - mongo_data:/data/db  # Persiste dados no diretório local
+    networks:
+      - sb-emulator
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo-express
+    ports:
+      - "8081:8081"  # Expõe a interface web na porta 8081
+    networks:
+      - sb-emulator
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: 'sa'
+      ME_CONFIG_BASICAUTH_PASSWORD: 'senha'
+
+      ME_CONFIG_MONGODB_SERVER: mongo
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_SITE_BASEURL: / # Caso queira definir um URL base personalizado
 
 networks:
   sb-emulator:
 
 volumes:
   emulatordata:
+  dbdata:
+  mongo_data:
