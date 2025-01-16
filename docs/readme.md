@@ -29,6 +29,9 @@ A arquitetura da aplicação é composta por diversas Azure Functions e serviço
 ## vantagens em utilizar o processo de fila 
 
 ## 1. Processamento assincrono de mensagens 
+O processamento assíncrono de mensagens permite que a aplicação receba e processe mensagens de forma não bloqueante, garantindo maior desempenho e escalabilidade. As mensagens são colocadas em uma fila e processadas conforme a capacidade do sistema, permitindo que outras tarefas sigam seu fluxo sem esperar pela conclusão de cada mensagem individualmente.
+
+
 ![Descrição do GIF](./FuncionamentoNormal.gif)
 
 ## 2. Resiliência Durante Falhas Temporárias da Aplicação
@@ -38,7 +41,8 @@ Caso a sua aplicação fique temporariamente fora do ar, as mensagens na fila n�
 ![Descrição do GIF](./SuaAplicacaoEstaFora.gif)
 
 ## 3. Retry (Tentativas de Reenvio Automáticas)
-As filas de mensagens oferecem suporte automático para tentativas de reenvio, permitindo que, caso uma mensagem falhe ao ser processada, o sistema tente novamente em intervalos definidos. Isso aumenta a confiabilidade do processamento, garantindo que mensagens não sejam perdidas devido a falhas temporárias.
+As filas de mensagens oferecem suporte automático para tentativas de reenvio, permitindo que, caso uma mensagem falhe ao ser processada, o sistema tente novamente em intervalos definidos. Isso aumenta a confiabilidade do processamento, garantindo que mensagens não sejam perdidas devido a falhas temporárias. Neste projeto foi configurado para fazer 2 tentativas antes de enviar para dead letter queue. 
+![alt text](image-5.png)
 
 ## CQRS e Event Sourcing
 
@@ -87,6 +91,19 @@ Cada uma dessas **Subscription** será consumida pelas respectivas funções de 
 
 - As credenciais podem ser armazenadas em **Azure Key Vault** ou no **App Settings** da função para maior segurança.
 
+### API Whatsaap
+ - Primeiro precisamos criar um app no developers.facebook
+
+
+ ![alt text](image-2.png)
+
+- Selecionar Configuração da API 
+![alt text](image-3.png)
+ 
+- depois disso basta gerar o Token provisório para testar nossa aplicação
+![alt text](image-4.png)
+
+- ele tambem te da a opção de fazer um teste selecionando um numero e enviando a mensagem via curl 
 ### Dead Letter Queue
 
 - Configure a **Dead Letter Queue** no Azure Service Bus para capturar mensagens falhas.
